@@ -1,7 +1,7 @@
 # alternc-test-casperjs
 
 
-![alt text](https://github.com/AlternC/alternc-test-casperjs/raw/master/cast/cast/admin.domain.delete.gif "A test example")
+![alt text](https://github.com/AlternC/alternc-test-casperjs/raw/master/cast/admin.domain.delete.gif "A test example")
 
 ## Status 
 
