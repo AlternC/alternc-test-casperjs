@@ -1,0 +1,17 @@
+node_modules/
+screenshots
+.DS_Store
+/nbproject
+*.swp
+*.swn
+*.swo
+.~*
+~*
+.eslintcache
+*.scssc
+.sass-cache/*
+*.sublime-project
+*.sublime-workspace
+yarn.lock
+/NodeJsApplication/nbproject/private/tests/params.js
+cast/*json

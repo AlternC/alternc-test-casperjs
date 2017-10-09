@@ -1,0 +1,9 @@
+/**
+* Copy this file as params.js and edit variables according to your needs
+*/
+
+var serverIpAdress='127.0.0.1';
+var adminLogin='admin';
+var adminPassword='admin';
+var userLogin='user';
+var userPassword='user';
