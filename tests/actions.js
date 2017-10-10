@@ -7,9 +7,9 @@
  * @param {object} test
  */
 casper.doScreenshot = function (test) {
-    if( ! typeof ( test ) === "object" || ! typeof ( test.currentSuite ) === "object"){
-    var screenshotName = 'screenshots/__undefined__' + '-' + new Date().toISOString() + '.png';
-    }else{
+    if (!typeof (test) === "object" || !typeof (test.currentSuite) === "object") {
+        var screenshotName = 'screenshots/__undefined__' + '-' + new Date().toISOString() + '.png';
+    } else {
         var screenshotName = 'screenshots/' + test.currentSuite.name + '-' + new Date().toISOString() + '.png';
     }
     casper.echo('Saving screenshot to ' + screenshotName);
@@ -19,7 +19,7 @@ casper.doScreenshot = function (test) {
 /**
  * 
  * @param {object} test
- * @param string element
+ * @param {string} element
  */
 casper.assertScreenshot = function (test, element) {
     this.doScreenshot(test);
@@ -28,13 +28,13 @@ casper.assertScreenshot = function (test, element) {
     } else {
         test.assertFalsy(true);
     }
-}
+};
 
 /**
  * Encapsulates fillForm 
  * 
  * @param {object} test
- * @param string element
+ * @param {string} element
  * @param {object} data
  * @returns Promise
  */
@@ -47,12 +47,12 @@ casper.setFormElement = function (test, element, data) {
             function fail() {
                 this.assertScreenshot(test, element);
             });
-}
+};
 
 /**
  * 
  * @param {object} test
- * @param string element
+ * @param {string} element
  */
 casper.clickElement = function (test, element) {
     casper.waitForSelector(element,
@@ -63,11 +63,12 @@ casper.clickElement = function (test, element) {
             function fail() {
                 this.assertScreenshot(test, element);
             });
-}
+};
 
 /**
  * 
  * @param {object} test
+ * @param {string} element
  */
 casper.checkElement = function (test, element) {
     casper.waitForSelector(element,
@@ -77,7 +78,7 @@ casper.checkElement = function (test, element) {
             function fail() {
                 this.assertScreenshot(element);
             });
-}
+};
 
 
 /**
@@ -92,17 +93,17 @@ casper.checkSucess = function (test) {
             }, function fail() {
         this.assertScreenshot(test, "div[class='alert alert-success']");
     });
-}
+};
 
 /**
  * 
  * @param {object} test
- * @param string login
- * @param string pass
+ * @param {string} login
+ * @param {string} pass
  */
 casper.login = function (test, login, pass) {
 
-    // If no login form, let's logout
+// If no login form, let's logout
     casper.waitForSelector('form[action="login.php"]',
             function success() {
             },
@@ -112,40 +113,64 @@ casper.login = function (test, login, pass) {
     // Fill login form 
     casper.setFormElement(test, 'form[action="login.php"]', {
         username: login,
-        password: pass,
+        password: pass
     });
     // Wait for menu
     casper.checkElement(test, "div[id=menu]");
-}
+};
+
+/**
+ * 
+ * Helper. Encapsulates the waitForExec command for ease of use in test scenarios
+ * 
+ * @example     casper.checkCommandLine(test,"/bin/bash",[ "-c" ,"ls", "-lh","1>/dev/null"]);
+ * @param {object} test
+ * @param {string} command
+ * @param {array} commandArgs
+ * @param {number} timeout
+ * @returns {undefined}
+ */
+casper.checkCommandLine = function (test, command, commandArgs,timeout) {
+
+    var success = function (response) {
+//        this.echo("Program finished by itself:" + JSON.stringify(response.data));
+        test.assertTruthy(response.data.exitCode === 0, 'Command "' + command + '" with args "' + commandArgs.join(" ") + '"');
+    };
+    var error = function (timeout, response) {
+//        this.echo("Program finished by casper:" + JSON.stringify(response.data));
+        test.assertTruthy(response.data.elapsedTime < 0, 'Timed out ('+response.data.elapsedTime+'ms) for command "' + command + '" with args "' + commandArgs.join(" ") + '"');
+    };
+    casper.waitForExec(command, commandArgs, success, error,timeout);
+};
+
 
 /**
  * 
  * @param {object} test
- * @param string login
- * @param string pass
+ * @param {string} login
+ * @param {string} pass
  
  */
 casper.logout = function (test, login, pass) {
 
-    // Wait for menu
+// Wait for menu
     casper.checkElement(test, 'div[id=menu]');
     // Click logout
     casper.clickElement(test, 'a[href="mem_logout.php"]');
     // Wait for "ok"
     casper.checkElement(test, 'h3');
-
-}
+};
 
 
 /**
  * 
  * @param {object} test
- * @param string login
- * @param string pass
+ * @param {string} login
+ * @param {string} pass
  */
 casper.createUser = function (test, login, pass) {
 
-    // Click "manage users"
+// Click "manage users"
     casper.clickElement(test, 'div[id="menu-admin"] a[href="adm_list.php"]');
     // Click add user
     casper.clickElement(test, 'a[href="adm_add.php"]');
@@ -156,11 +181,10 @@ casper.createUser = function (test, login, pass) {
         passconf: pass,
         nom: login,
         prenom: login,
-        nmail: login + "@example.tld",
-
+        nmail: login + "@example.tld"
     });
     casper.checkSucess(test);
-}
+};
 
 
 /**
@@ -168,7 +192,7 @@ casper.createUser = function (test, login, pass) {
  * @param {object} test
  */
 casper.deleteUser = function (test) {
-    // It should wait for the menu and click on admin user
+// It should wait for the menu and click on admin user
     casper.clickElement(test, 'div[id="menu-admin"] a[href="adm_list.php"]');
     // It should click on the first user checkbox
     casper.clickElement(test, 'form input[name="accountList[]"]');
@@ -179,14 +203,14 @@ casper.deleteUser = function (test) {
     // It should click on confirm delete
     casper.clickElement(test, 'form[action="adm_dodel.php"] input[type="submit"]');
     casper.checkSucess(test);
-}
+};
 
 /**
  * 
  * @param {object} test
  */
 casper.editUser = function (test) {
-    // click menu 
+// click menu 
     casper.clickElement(test, 'div[id="menu-admin"] a[href="adm_list.php"]');
     // Click edit user
     casper.clickElement(test, 'a[href="adm_edit.php?uid=2001"]');
@@ -196,26 +220,26 @@ casper.editUser = function (test) {
         passconf: 'testpass',
         nom: 'newname',
         prenom: 'newfirst',
-        nmail: 'newmail@dom.tld',
+        nmail: 'newmail@dom.tld'
     });
     casper.checkSucess(test);
-}
+};
 
 
 casper.createDomain = function (test, domain) {
-    // Click on new dom
+// Click on new dom
     casper.clickElement(test, 'a[href="dom_add.php"]');
     // Validate form
     casper.setFormElement(test, 'form[action="dom_doadd.php"]', {newdomain: domain});
     // OK, no error
     casper.checkElement(test, "div[class='alert alert-success']");
     casper.checkSucess(test);
-}
+};
 
 
 casper.deleteDomain = function (test, domain) {
 
-    // Wait for domain edit button
+// Wait for domain edit button
     casper.clickElement(test, 'a[href="dom_edit.php?domain=' + domain + '"]');
     // click on delete
     casper.clickElement(test, 'a[href="#tabsdom-delete"]');
@@ -228,4 +252,4 @@ casper.deleteDomain = function (test, domain) {
     // OK, no error
     casper.checkElement(test, "div[class='alert alert-success']");
     casper.checkSucess(test);
-}
+};
