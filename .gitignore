@@ -13,5 +13,5 @@ screenshots
 *.sublime-project
 *.sublime-workspace
 yarn.lock
-/NodeJsApplication/nbproject/private/tests/params.js
+tests/params.js
 cast/*json
