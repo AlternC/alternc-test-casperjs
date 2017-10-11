@@ -9,6 +9,8 @@ casper.test.begin('ftp.edit', {
         casper.createDomain(test, "domaine-ftp-edit.fr");
         casper.createFtp(test, "domaine-ftp-edit.fr", "test", "2oopa1uzt");
         casper.checkCommandLine(test, "bash", ['-c', 'curl ftp://user:2oopa1uzt@' + serverIpAdress + '']);
+        casper.editFtp(test, "domaine-ftp-edit.fr", "user", "9newpass1");
+        casper.checkCommandLine(test, "bash", ['-c', 'curl ftp://user:9newpass1@' + serverIpAdress + '']);
         casper.deleteFtp(test, "domaine-ftp-edit.fr", "user", "pass");
         casper.deleteDomain(test, "domaine-ftp-edit.fr");
         casper.logout(test);

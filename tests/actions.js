@@ -158,7 +158,7 @@ casper.login = function (test, login, pass) {
 // If no login form, let's logout
     casper.waitForSelector('form[action="login.php"]',
             function success() {
-                this.echo("Login user in as " + login )
+                this.echo("Login user in as " + login)
             },
             function fail() {
                 casper.clickElement(test, "a[href='mem_logout.php']");
@@ -315,6 +315,30 @@ casper.createFtp = function (test, domain, login, pass) {
 };
 
 
+/**
+ * 
+ * @param {object} test
+ * @param {type} domain
+ * @returns {undefined}
+ */
+casper.editFtp = function (test, domain, login, pass) {
+
+    casper.then(function () {
+        // Wait for domain edit button
+        casper.clickElement(test, '#menu-ftp a[href="ftp_list.php"]');
+        // click on edit
+        casper.clickElement(test, 'div[class="ina edit"]:first-child a');
+        // Validate form
+        casper.setFormElement(test, 'form#main[action="ftp_doedit.php"]', {
+            login: '',
+            pass: pass,
+            passconf: pass
+        });
+        // OK, no error
+        casper.checkElement(test, "div[class='alert alert-success']");
+        casper.checkSuccess(test);
+    })
+};
 /**
  * 
  * @param {object} test
