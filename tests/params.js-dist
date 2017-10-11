@@ -1,9 +1,12 @@
 /**
 * Copy this file as params.js and edit variables according to your needs
 */
+casper.options.viewportSize = {width: 1489, height: 404};
 
 var serverIpAdress='127.0.0.1';
 var adminLogin='admin';
 var adminPassword='admin';
 var userLogin='user';
 var userPassword='user';
+// useReset = true will attempt to call a reset.php URL to clean db on each test
+var useReset = false;

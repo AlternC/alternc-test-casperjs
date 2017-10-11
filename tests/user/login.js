@@ -1,9 +1,8 @@
-/* global casper, serverIpAdress */
-
+/* global casper, serverIpAdress, userLogin, userPassword */
 casper.test.begin('user.login', function (test) {
     casper.start('http://' + serverIpAdress + '/index.php');
-
-    casper.checkCommandLine(test,"/bin/bash",[ "-c" ,"sleep 10"]);
+    casper.login(test, userLogin, userPassword );
+    casper.logout(test);
     casper.run(function () {
         test.done();
     });
